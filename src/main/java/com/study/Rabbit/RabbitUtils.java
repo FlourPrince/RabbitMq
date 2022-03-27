@@ -29,12 +29,13 @@ public class RabbitUtils {
 
     public static void closeConnAndChannel(Connection connection, Channel channel) {
         try {
-            if (connection != null) {
-                connection.close();
-            }
             if (channel != null) {
                 channel.close();
             }
+            if (connection != null) {
+                connection.close();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
