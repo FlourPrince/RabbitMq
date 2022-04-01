@@ -1,20 +1,23 @@
-package com.study.Rabbit.Work;
+package com.study.rabbit.direct;
 
 import com.rabbitmq.client.*;
-import com.study.Rabbit.RabbitUtils;
+import com.study.rabbit.RabbitUtils;
 
 import java.io.IOException;
 
-public class WorkConsumer1 {
-
+public class Consumer2 {
     public static void main(String[] args) {
-
         try {
             Connection connection= RabbitUtils.getConnection();
             Channel channel = connection.createChannel();
 
-            channel.queueDeclare("testHello", false, false, false, null);
-            channel.basicConsume("testHello", true, new DefaultConsumer(channel) {
+            channel.exchangeDeclare("logs-direct","direct");
+
+            String queue=channel.queueDeclare().getQueue();
+
+            channel.queueBind(queue,"logs-direct","error");
+
+            channel.basicConsume(queue, true, new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                     System.out.println(new String(body));
@@ -22,12 +25,8 @@ public class WorkConsumer1 {
                 }
             });
 
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

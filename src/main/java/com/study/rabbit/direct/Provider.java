@@ -1,10 +1,9 @@
-package com.study.Rabbit.Direct;
+package com.study.rabbit.direct;
 
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.study.Rabbit.RabbitUtils;
+import com.study.rabbit.RabbitUtils;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,8 +33,7 @@ public class Provider {
            //4.消息内容
            channel.basicPublish("","testHello",null,"Hello RabbitMQ".getBytes(StandardCharsets.UTF_8));
            System.out.printf("发送成功");
-           channel.close();
-           connection.close();
+           RabbitUtils.closeConnAndChannel(connection,channel);
        } catch (IOException e) {
            e.printStackTrace();
        }
